@@ -1,2 +1,5 @@
 ---
-# tasks file for antonchernik.atlassian-jira
+- unarchive:
+   src: "{{ jira_tarball_url }}"
+   dest: "{{ default_download_path }}"
+   remote_src: true
