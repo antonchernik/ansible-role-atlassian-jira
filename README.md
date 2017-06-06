@@ -21,7 +21,7 @@ Dependencies
 ------------
 
     dependencies:
-     - { role: role: antonchernik.oracle-jdk }
+     - role: antonchernik.oracle-jdk
 
 Example 
 ----------------

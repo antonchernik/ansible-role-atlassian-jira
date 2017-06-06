@@ -11,5 +11,5 @@ galaxy_info:
     - web
     - atlassian
     - jira
-  dependencies:
-    - { role: role: antonchernik.oracle-jdk }
+dependencies:
+  - role: antonchernik.oracle-jdk
