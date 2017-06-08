@@ -1,5 +1,38 @@
 ---
+- user:
+    name: "{{ atlassian_user_name }}"
+    shell: /sbin/nologin
+    comment: "Atlassian nologin User"
+    append: yes
+
 - unarchive:
-   src: "{{ jira_tarball_url }}"
-   dest: "{{ default_download_path }}"
-   remote_src: true
+    src: "{{ jira_tarball_url }}"
+    dest: "/home/{{ atlassian_user_name }}/"
+    remote_src: True
+  become_user: "{{ atlassian_user_name }}"
+
+- file:
+    src: "/home/{{ atlassian_user_name }}/{{ jira_tarball_directory }}"
+    dest: "/home/{{ atlassian_user_name }}/{{ jira_directory }}"
+    state: link
+  become_user: "{{ atlassian_user_name }}"
+
+- file:
+    path: "/home/{{ atlassian_user_name }}/{{ jira_home_directory }}"
+    state: directory
+    mode: "u=rwx,go-rwx"
+  become_user: "{{ atlassian_user_name }}"
+
+- template:
+    src: ../templates/atlassian-jira/WEB-INF/classes/jira-application.properties
+    dest: "/home/{{ atlassian_user_name }}/{{ jira_directory }}/atlassian-jira/WEB-INF/classes/jira-application.properties"
+    mode: 0644
+    force: yes
+  become_user: "{{ atlassian_user_name }}"
+
+- template:
+    src: ../templates/conf/server.xml
+    dest: "/home/{{ atlassian_user_name }}/{{ jira_directory }}/conf/server.xml"
+    mode: 0644
+    force: yes
+  become_user: "{{ atlassian_user_name }}"
