@@ -4,6 +4,7 @@
     shell: /usr/sbin/nologin
     comment: "Atlassian nologin User"
     append: yes
+  become: true
 
 - unarchive:
     src: "https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-software-{{ jira_version }}.tar.gz"
@@ -42,6 +43,7 @@
     dest: /etc/init.d/jira
     owner: "{{ atlassian_user_name }}"
     mode: "u=rwx,go=rx"
+  become: true
 
 - get_url:
    url: "https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-{{ java_mysql_connector_version }}.tar.gz"
@@ -62,6 +64,8 @@
 
 - name: JIRA ROLE | Update script list
   command: update-rc.d -f jira defaults
+  become: true
 
 - name: JIRA ROLE | Ensure jira is restarted
   action: service name=jira state=restarted
+  become: true
