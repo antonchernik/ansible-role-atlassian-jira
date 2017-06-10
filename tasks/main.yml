@@ -1,7 +1,7 @@
 ---
 - user:
     name: "{{ atlassian_user_name }}"
-    shell: /sbin/nologin
+    shell: /usr/sbin/nologin
     comment: "Atlassian nologin User"
     append: yes
 
