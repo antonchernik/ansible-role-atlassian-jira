@@ -16,7 +16,7 @@ Available variables are listed below, along with default values (see defaults/ma
 
 | Parameter | Required | Default | Choices | Comments |
 | ------------- | ------------- | ------------- | ------------- | ------------- |
-| default_download_path | yes | /tmp | | Sets directory where files will be downloaded |
+| default_download_directory | yes | /tmp | | Sets directory where files will be downloaded |
 | jira_version  | yes | 7.3.7 | | Sets Atlassian Jira version for installing  |
 | atlassian_user_name | yes  | atlassian | | Sets Jira system user to run with /sbin/nologin |
 | jira_directory | yes  | jira | | Sets Jira directory name. Example /home/[:atlassian_user_name]/[:jira_directory] |

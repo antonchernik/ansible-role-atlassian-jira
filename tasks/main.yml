@@ -45,19 +45,19 @@
 
 - get_url:
    url: "https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-{{ java_mysql_connector_version }}.tar.gz"
-   dest: "{{ default_download_path }}"
+   dest: "{{ default_download_directory }}"
    owner: "{{ atlassian_user_name }}"
    group: "{{ atlassian_user_name }}"
 
 - unarchive:
-   src: "{{ default_download_path }}/mysql-connector-java-{{ java_mysql_connector_version }}.tar.gz"
-   dest: "{{ default_download_path }}"
+   src: "{{ default_download_directory }}/mysql-connector-java-{{ java_mysql_connector_version }}.tar.gz"
+   dest: "{{ default_download_directory }}"
    remote_src: True
    owner: "{{ atlassian_user_name }}"
    group: "{{ atlassian_user_name }}"
 
 - name: JIRA ROLE | Copy mysql-connector-java
-  command: "chdir={{ default_download_path }}/mysql-connector-java-{{ java_mysql_connector_version }} cp mysql-connector-java-{{ java_mysql_connector_version }}-bin.jar /home/{{ atlassian_user_name }}/{{ jira_directory }}/lib"
+  command: "chdir={{ default_download_directory }}/mysql-connector-java-{{ java_mysql_connector_version }} cp mysql-connector-java-{{ java_mysql_connector_version }}-bin.jar /home/{{ atlassian_user_name }}/{{ jira_directory }}/lib"
   become_user: "{{ atlassian_user_name }}"
 
 - name: JIRA ROLE | Update script list

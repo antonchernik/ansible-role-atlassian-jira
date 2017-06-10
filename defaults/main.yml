@@ -1,6 +1,6 @@
 ---
 # defaults file for antonchernik.atlassian-jira
-default_download_path: /tmp
+default_download_directory: /tmp
 jira_version: 7.3.7
 atlassian_user_name: atlassian
 jira_directory: jira
