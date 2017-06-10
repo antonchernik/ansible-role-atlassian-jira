@@ -7,3 +7,5 @@ jira_tarball_directory: atlassian-jira-software-7.3.7-standalone
 atlassian_user_name: atlassian
 jira_directory: jira
 jira_home_directory: jira-home
+java_home_directory: /usr/lib/jvm
+java_mysql_connector_version: 5.1.42

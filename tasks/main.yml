@@ -36,3 +36,32 @@
     mode: 0644
     force: yes
   become_user: "{{ atlassian_user_name }}"
+
+- template:
+    src: ../templates/etc/init.d/jira.j2
+    dest: /etc/init.d/jira
+    owner: "{{ atlassian_user_name }}"
+    mode: "u=rwx,go=rx"
+
+- get_url:
+   url: "https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-{{ java_mysql_connector_version }}.tar.gz"
+   dest: "{{ default_download_path }}"
+   owner: "{{ atlassian_user_name }}"
+   group: "{{ atlassian_user_name }}"
+
+- unarchive:
+   src: "{{ default_download_path }}/mysql-connector-java-{{ java_mysql_connector_version }}.tar.gz"
+   dest: "{{ default_download_path }}"
+   remote_src: True
+   owner: "{{ atlassian_user_name }}"
+   group: "{{ atlassian_user_name }}"
+
+- name: JIRA ROLE | Copy mysql-connector-java
+  command: "chdir={{ default_download_path }}/mysql-connector-java-{{ java_mysql_connector_version }} cp mysql-connector-java-{{ java_mysql_connector_version }}-bin.jar /home/{{ atlassian_user_name }}/{{ jira_directory }}/lib"
+  become_user: "{{ atlassian_user_name }}"
+
+- name: JIRA ROLE | Update script list
+  command: update-rc.d -f jira defaults
+
+- name: JIRA ROLE | Ensure jira is restarted
+  action: service name=jira state=restarted
