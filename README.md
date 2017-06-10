@@ -14,17 +14,15 @@ Role Variables
 
 Available variables are listed below, along with default values (see defaults/main.yml):
 
-| Parameter | Required | Default | Choices |
-| ------------- | ------------- | ------------- | ------------- |
-| default_download_path | yes | /tmp |  |
-| jira_tarball_url  | yes | https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-software-7.3.7.tar.gz |  |
-| jira_tarball_file | yes | atlassian-jira-software-7.3.7.tar.gz  |  |
-| jira_tarball_directory | yes | atlassian-jira-software-7.3.7-standalone |  |
-| atlassian_user_name | yes  | atlassian |  |
-| jira_directory | yes  | jira |  |
-| jira_home_directory | yes  | jira-home |  |
-| java_home_directory | yes  | /usr/lib/jvm |  |
-| java_mysql_connector_version | yes  | 5.1.42 |  |
+| Parameter | Required | Default | Choices | Comments |
+| ------------- | ------------- | ------------- | ------------- | ------------- |
+| default_download_path | yes | /tmp | | Sets directory where files will be downloaded |
+| jira_version  | yes | 7.3.7 | | Sets Atlassian Jira version for installing  |
+| atlassian_user_name | yes  | atlassian | | Sets Jira system user to run with /sbin/nologin |
+| jira_directory | yes  | jira | | Sets Jira directory name. Example /home/[:atlassian_user_name]/[:jira_directory] |
+| jira_home_directory | yes  | jira-home | | Sets Jira directory for all file. Example /home/[:atlassian_user_name]/[:jira_home_directory] |
+| java_home_directory | yes  | /usr/lib/jvm | | Sets path to JAVA_HOME |
+| java_mysql_connector_version | yes  | 5.1.42 | | Sets version for MySQL java connector |
 
 
 

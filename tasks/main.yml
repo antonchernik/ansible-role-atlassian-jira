@@ -6,13 +6,13 @@
     append: yes
 
 - unarchive:
-    src: "{{ jira_tarball_url }}"
+    src: "https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-software-{{ jira_version }}.tar.gz"
     dest: "/home/{{ atlassian_user_name }}/"
     remote_src: True
   become_user: "{{ atlassian_user_name }}"
 
 - file:
-    src: "/home/{{ atlassian_user_name }}/{{ jira_tarball_directory }}"
+    src: "/home/{{ atlassian_user_name }}/atlassian-jira-software-{{ jira_version }}-standalone"
     dest: "/home/{{ atlassian_user_name }}/{{ jira_directory }}"
     state: link
   become_user: "{{ atlassian_user_name }}"
