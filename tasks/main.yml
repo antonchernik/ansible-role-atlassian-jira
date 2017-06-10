@@ -11,18 +11,21 @@
     dest: "/home/{{ atlassian_user_name }}/"
     remote_src: True
   become_user: "{{ atlassian_user_name }}"
+  become: true
 
 - file:
     src: "/home/{{ atlassian_user_name }}/atlassian-jira-software-{{ jira_version }}-standalone"
     dest: "/home/{{ atlassian_user_name }}/{{ jira_directory }}"
     state: link
   become_user: "{{ atlassian_user_name }}"
+  become: true
 
 - file:
     path: "/home/{{ atlassian_user_name }}/{{ jira_home_directory }}"
     state: directory
     mode: "u=rwx,go-rwx"
   become_user: "{{ atlassian_user_name }}"
+  become: true
 
 - template:
     src: ../templates/atlassian-jira/WEB-INF/classes/jira-application.properties
@@ -30,6 +33,7 @@
     mode: 0644
     force: yes
   become_user: "{{ atlassian_user_name }}"
+  become: true
 
 - template:
     src: ../templates/conf/server.xml
@@ -37,6 +41,8 @@
     mode: 0644
     force: yes
   become_user: "{{ atlassian_user_name }}"
+  become: true
+
 
 - template:
     src: ../templates/etc/init.d/jira.j2
@@ -50,6 +56,7 @@
    dest: "{{ default_download_directory }}"
    owner: "{{ atlassian_user_name }}"
    group: "{{ atlassian_user_name }}"
+  become: true
 
 - unarchive:
    src: "{{ default_download_directory }}/mysql-connector-java-{{ java_mysql_connector_version }}.tar.gz"
@@ -57,10 +64,13 @@
    remote_src: True
    owner: "{{ atlassian_user_name }}"
    group: "{{ atlassian_user_name }}"
+  become: true
+
 
 - name: JIRA ROLE | Copy mysql-connector-java
   command: "chdir={{ default_download_directory }}/mysql-connector-java-{{ java_mysql_connector_version }} cp mysql-connector-java-{{ java_mysql_connector_version }}-bin.jar /home/{{ atlassian_user_name }}/{{ jira_directory }}/lib"
   become_user: "{{ atlassian_user_name }}"
+  become: true
 
 - name: JIRA ROLE | Update script list
   command: update-rc.d -f jira defaults
