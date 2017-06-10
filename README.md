@@ -14,18 +14,10 @@ Role Variables
 
 Available variables are listed below, along with default values (see defaults/main.yml):
 
-
-    Parameter                    | Required | Default                                      | Choices | Comments
-    ---------------------------- | -------- | -------------------------------------------- | ------- | --------
-    default_download_path        | yes      | /tmp                                         |         |
-    jira_tarball_url             | yes      | https://www.atlassian.com/so...-7.3.7.tar.gz |         |
-    jira_tarball_file            | yes      | atlassian-jira-software-7.3.7.tar.gz         |         |
-    jira_tarball_directory       | yes      | atlassian-jira-software-7.3.7-standalone     |         |
-    atlassian_user_name          | yes      | atlassian                                    |         |
-    jira_directory               | yes      | jira                                         |         |
-    jira_home_directory          | yes      | jira-home                                    |         |
-    java_home_directory          | yes      | /usr/lib/jvm                                 |         |
-    java_mysql_connector_version | yes      | 5.1.42                                       |         |
+| Parameter | Required | Default | Choices |
+| ------------- | ------------- | ------------- | ------------- |
+| default_download_path  | yes  | /tmp |  |
+| jira_tarball_url  | yes  | https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-software-7.3.7.tar.gz |  |
 
 
 Dependencies
