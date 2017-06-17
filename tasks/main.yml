@@ -36,7 +36,7 @@
   become: true
 
 - template:
-    src: ../templates/conf/server.xml
+    src: ../templates/atlassian-jira/conf/server.xml
     dest: "/home/{{ atlassian_user_name }}/{{ jira_directory }}/conf/server.xml"
     mode: 0644
     force: yes
