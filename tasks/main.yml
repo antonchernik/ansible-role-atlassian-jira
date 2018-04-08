@@ -1,10 +1,16 @@
 ---
+- name: JIRA ROLE | Check if jira service is installed
+  shell: service jira status >/dev/null 2>&1
+  register: is_jira_service_installed
+  ignore_errors: yes
+
 - user:
     name: "{{ atlassian_user_name }}"
     shell: /usr/sbin/nologin
     comment: "Atlassian nologin User"
     append: yes
   become: true
+  when: is_jira_service_installed.rc != 0
 
 - unarchive:
     src: "https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-software-{{ jira_version }}.tar.gz"
@@ -12,6 +18,7 @@
     remote_src: True
   become_user: "{{ atlassian_user_name }}"
   become: true
+  when: is_jira_service_installed.rc != 0
 
 - file:
     src: "/home/{{ atlassian_user_name }}/atlassian-jira-software-{{ jira_version }}-standalone"
@@ -19,6 +26,7 @@
     state: link
   become_user: "{{ atlassian_user_name }}"
   become: true
+  when: is_jira_service_installed.rc != 0
 
 - file:
     path: "/home/{{ atlassian_user_name }}/{{ jira_home_directory }}"
@@ -26,6 +34,7 @@
     mode: "u=rwx,go-rwx"
   become_user: "{{ atlassian_user_name }}"
   become: true
+  when: is_jira_service_installed.rc != 0
 
 - template:
     src: ../templates/atlassian-jira/WEB-INF/classes/jira-application.properties
@@ -34,6 +43,7 @@
     force: yes
   become_user: "{{ atlassian_user_name }}"
   become: true
+  when: is_jira_service_installed.rc != 0
 
 - template:
     src: ../templates/atlassian-jira/conf/server.xml
@@ -42,6 +52,7 @@
     force: yes
   become_user: "{{ atlassian_user_name }}"
   become: true
+  when: is_jira_service_installed.rc != 0
 
 
 - template:
@@ -50,6 +61,7 @@
     owner: "{{ atlassian_user_name }}"
     mode: "u=rwx,go=rx"
   become: true
+  when: is_jira_service_installed.rc != 0
 
 - get_url:
    url: "https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-{{ java_mysql_connector_version }}.tar.gz"
@@ -57,6 +69,7 @@
    owner: "{{ atlassian_user_name }}"
    group: "{{ atlassian_user_name }}"
   become: true
+  when: is_jira_service_installed.rc != 0
 
 - unarchive:
    src: "{{ default_download_directory }}/mysql-connector-java-{{ java_mysql_connector_version }}.tar.gz"
@@ -65,17 +78,21 @@
    owner: "{{ atlassian_user_name }}"
    group: "{{ atlassian_user_name }}"
   become: true
+  when: is_jira_service_installed.rc != 0
 
 
 - name: JIRA ROLE | Copy mysql-connector-java
   command: "chdir={{ default_download_directory }}/mysql-connector-java-{{ java_mysql_connector_version }} cp mysql-connector-java-{{ java_mysql_connector_version }}-bin.jar /home/{{ atlassian_user_name }}/{{ jira_directory }}/lib"
   become_user: "{{ atlassian_user_name }}"
   become: true
+  when: is_jira_service_installed.rc != 0
 
 - name: JIRA ROLE | Update script list
   command: update-rc.d -f jira defaults
   become: true
+  when: is_jira_service_installed.rc != 0
 
 - name: JIRA ROLE | Ensure jira is restarted
   action: service name=jira state=restarted
   become: true
+  when: is_jira_service_installed.rc != 0
