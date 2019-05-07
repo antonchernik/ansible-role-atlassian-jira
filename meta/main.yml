@@ -15,4 +15,4 @@ galaxy_info:
     - atlassian
     - jira
 dependencies:
-  - role: antonchernik.oracle-jdk
+  - role: geerlingguy.java
