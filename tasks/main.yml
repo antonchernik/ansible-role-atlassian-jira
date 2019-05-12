@@ -42,21 +42,21 @@
 
 - name: JIRA ROLE | Modify Jira config. Set jira home directory path
   template:
-    src: ../templates/atlassian-jira/WEB-INF/classes/jira-application.properties.j2
+    src: templates/atlassian-jira/WEB-INF/classes/jira-application.properties.j2
     dest: "/home/{{ atlassian_user_name }}/{{ jira_directory }}/atlassian-jira/WEB-INF/classes/jira-application.properties"
     mode: 0644
     force: yes
 
 - name: JIRA ROLE | Modify Jira config server config
   template:
-    src: ../templates/atlassian-jira/conf/server.xml.j2
+    src: templates/atlassian-jira/conf/server.xml.j2
     dest: "/home/{{ atlassian_user_name }}/{{ jira_directory }}/conf/server.xml"
     mode: 0644
     force: yes
 
 - name: JIRA ROLE | Setup Jira init script
   template:
-    src: ../templates/etc/init.d/jira.j2
+    src: templates/etc/init.d/jira.j2
     dest: /etc/init.d/jira
     mode: 0755
     owner: root
