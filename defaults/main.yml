@@ -5,5 +5,10 @@ jira_version: 8.1.0
 atlassian_user_name: atlassian
 jira_directory: jira
 jira_home_directory: jira-home
-java_home_directory: /usr/lib/jvm
+jira_port: 8080
+jira_proxy_host: ""
+jira_proxy_port: ""
+jira_proxy_https: false
+jira_context_path: ""
+java_home: /usr/lib/jvm/java-8-openjdk-amd64
 java_mysql_connector_version: 5.1.47

@@ -20,13 +20,18 @@ Available variables are listed below, along with default values (see defaults/ma
 
 | Parameter | Required | Default | Choices | Comments |
 | ------------- | ------------- | ------------- | ------------- | ------------- |
-| default_download_directory | yes | /tmp | | Sets directory where files will be downloaded |
-| jira_version  | yes | 7.8.2 | | Sets Atlassian Jira version for installing  |
-| atlassian_user_name | yes  | atlassian | | Sets Jira system user to run with /sbin/nologin |
-| jira_directory | yes  | jira | | Sets Jira directory name. Example /home/[:atlassian_user_name]/[:jira_directory] |
-| jira_home_directory | yes  | jira-home | | Sets Jira directory for all file. Example /home/[:atlassian_user_name]/[:jira_home_directory] |
-| java_home_directory | yes  | /usr/lib/jvm | | Sets path to JAVA_HOME |
-| java_mysql_connector_version | yes  | 5.1.46 | | Sets version for MySQL java connector |
+| default_download_directory | no | /tmp | | Sets directory where files will be downloaded |
+| jira_version  | no | 7.8.2 | | Sets Atlassian Jira version for installing  |
+| atlassian_user_name | no  | atlassian | | Sets Jira system user to run with /sbin/nologin |
+| jira_port | no | 8080 | | Set jira port
+| jira_proxy_host | no | | | Set jira proxy host
+| jira_context_path | no | | | Set jira context path. Example http://mydomain.com:8080[:jira_context_path]
+| jira_proxy_port | no | | | Set jira proxy port. Should be set for any proxy host
+| jira_proxy_https | no | false | | Set if proxy works with https
+| jira_directory | no  | jira | | Sets Jira directory name. Example /home/[:atlassian_user_name]/[:jira_directory] |
+| jira_home_directory | no  | jira-home | | Sets Jira directory for all file. Example /home/[:atlassian_user_name]/[:jira_home_directory] |
+| java_home | no  | /usr/lib/jvm | | Sets path to JAVA_HOME |
+| java_mysql_connector_version | no  | 5.1.46 | | Sets version for MySQL java connector |
 
 
 
@@ -36,7 +41,7 @@ Dependencies
 ------------
 
     dependencies:
-     - role: antonchernik.oracle-jdk
+     - role: geerlingguy.java
 
 Example 
 ----------------
