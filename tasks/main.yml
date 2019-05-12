@@ -1,102 +1,96 @@
 ---
-#- name: JIRA ROLE | Check if jira service is installed
-#  shell: service jira status >/dev/null 2>&1
-#  register: is_jira_service_installed
-#  ignore_errors: yes
-
 - name: JIRA ROLE | Check if jira service is installed
   stat: path=/etc/init.d/jira
   register: is_jira_service_installed
   ignore_errors: yes
-
-- debug:
-    var: is_jira_service_installed
-
-- name: JIRA ROLE | Ensure jira is restarted
+#- debug:
+#    var: is_jira_service_installed
+- name: JIRA ROLE | Ensure jira is stopped
   action: service name=jira state=stopped
   become: true
-  when: is_jira_service_installed.stat.exists == true
+  when: is_jira_service_installed.stat.exists
 
-- user:
+- name: JIRA ROLE | Create user for running Jira
+  user:
     name: "{{ atlassian_user_name }}"
     shell: /usr/sbin/nologin
     comment: "Atlassian nologin User"
     append: yes
   become: true
-  when: is_jira_service_installed.stat.exists != true
+  when: not is_jira_service_installed.stat.exists
 
-- unarchive:
+- name: JIRA ROLE | Downloading jira tar.gz archive
+  unarchive:
     src: "https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-software-{{ jira_version }}.tar.gz"
     dest: "/home/{{ atlassian_user_name }}/"
     remote_src: True
-  when: is_jira_service_installed.stat.exists != true
+  when: not is_jira_service_installed.stat.exists
 
-- file:
+- name: JIRA ROLE | Create symbolic link for jira folder
+  file:
     src: "/home/{{ atlassian_user_name }}/atlassian-jira-software-{{ jira_version }}-standalone"
     dest: "/home/{{ atlassian_user_name }}/{{ jira_directory }}"
     state: link
-  when: is_jira_service_installed.stat.exists != true
+  when: not is_jira_service_installed.stat.exists
 
-- file:
+- name: JIRA ROLE | Create Jira home directory
+  file:
     path: "/home/{{ atlassian_user_name }}/{{ jira_home_directory }}"
     state: directory
     mode: "u=rwx,go-rwx"
-  when: is_jira_service_installed.stat.exists != true
+  when: not is_jira_service_installed.stat.exists
 
-- template:
+- name: JIRA ROLE | Modify Jira config. Set jira home directory path
+  template:
     src: ../templates/atlassian-jira/WEB-INF/classes/jira-application.properties.j2
     dest: "/home/{{ atlassian_user_name }}/{{ jira_directory }}/atlassian-jira/WEB-INF/classes/jira-application.properties"
     mode: 0644
     force: yes
 
-- template:
+- name: JIRA ROLE | Modify Jira config server config
+  template:
     src: ../templates/atlassian-jira/conf/server.xml.j2
     dest: "/home/{{ atlassian_user_name }}/{{ jira_directory }}/conf/server.xml"
     mode: 0644
     force: yes
 
-
-- template:
+- name: JIRA ROLE | Setup Jira init script
+  template:
     src: ../templates/etc/init.d/jira.j2
     dest: /etc/init.d/jira
     mode: 0755
     owner: root
     group: root
-  when: is_jira_service_installed.stat.exists != true
+  when: not is_jira_service_installed.stat.exists
 
+- name: JIRA ROLE | Download MySQL jConnector
+  get_url:
+    url: "https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-{{ java_mysql_connector_version }}.tar.gz"
+    dest: "{{ default_download_directory }}"
+    owner: "{{ atlassian_user_name }}"
+    group: "{{ atlassian_user_name }}"
+  when: not is_jira_service_installed.stat.exists
 
-
-- get_url:
-   url: "https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-{{ java_mysql_connector_version }}.tar.gz"
-   dest: "{{ default_download_directory }}"
-   owner: "{{ atlassian_user_name }}"
-   group: "{{ atlassian_user_name }}"
-  when: is_jira_service_installed.stat.exists != true
-
-- unarchive:
-   src: "{{ default_download_directory }}/mysql-connector-java-{{ java_mysql_connector_version }}.tar.gz"
-   dest: "{{ default_download_directory }}"
-   remote_src: True
-   owner: "{{ atlassian_user_name }}"
-   group: "{{ atlassian_user_name }}"
-  when: is_jira_service_installed.stat.exists != true
-
-
-
+- name: JIRA ROLE | Unarchive MySQL jConnector
+  unarchive:
+    src: "{{ default_download_directory }}/mysql-connector-java-{{ java_mysql_connector_version }}.tar.gz"
+    dest: "{{ default_download_directory }}"
+    remote_src: True
+    owner: "{{ atlassian_user_name }}"
+    group: "{{ atlassian_user_name }}"
+  when: not is_jira_service_installed.stat.exists
 
 - name: JIRA ROLE | Copy mysql-connector-java
   command: "chdir={{ default_download_directory }}/mysql-connector-java-{{ java_mysql_connector_version }} cp mysql-connector-java-{{ java_mysql_connector_version }}-bin.jar /home/{{ atlassian_user_name }}/{{ jira_directory }}/lib"
-  when: is_jira_service_installed.stat.exists != true
+  when: not is_jira_service_installed.stat.exists
 
 - name: Fix permissions
   file: path=/home/{{ atlassian_user_name }} owner={{ atlassian_user_name }} group={{ atlassian_user_name }} mode=0775 state=directory recurse=yes
 
-
-
 - name: JIRA ROLE | Update script list
   command: update-rc.d -f jira defaults
   become: true
-  when: is_jira_service_installed.stat.exists != true
+  when: not is_jira_service_installed.stat.exists
 
 - name: JIRA ROLE | Ensure jira is restarted
   action: service name=jira state=restarted
